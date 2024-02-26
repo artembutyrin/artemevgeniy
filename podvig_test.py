@@ -29,9 +29,6 @@ class StaticImg(pygame.sprite.Sprite):
         self.rect.x = x_pos
         self.rect.y = y_pos
 
-    def update(self, *args):
-        pass
-
 
 class Level(pygame.sprite.Sprite):
     background = [load_image("backgrounds/under_water.jpg"),
@@ -142,9 +139,6 @@ class Portal(pygame.sprite.Sprite):
         self.rect.x = 1520
         self.rect.y = 350
 
-    def update(self, *args):
-        pass
-
 
 class Monsters(pygame.sprite.Sprite):
     image = load_image("static_img/portal.png")
@@ -159,6 +153,10 @@ class Monsters(pygame.sprite.Sprite):
         is_kill = pygame.sprite.spritecollideany(self, hero_sprites)
         if is_kill:
             magic_hero.HP_minus()
+            if magic_hero.HP == 0:
+                s_HP_0.play()
+            else:
+                s_HP_minus.play()
             self.kill()
 
     def bullitcollide(self, group):
@@ -206,6 +204,7 @@ class Guardian(Monsters):
 
     def gun(self):
         MonsterBullit(bullit_m_sprite, self.rect.x - 100, self.rect.y + 30)
+        s_fire_bullit.play()
 
 
 class FirePrinc(Monsters):
@@ -267,6 +266,10 @@ class FirePrinc(Monsters):
         is_kill = pygame.sprite.spritecollideany(self, hero_sprites)
         if is_kill:
             magic_hero.HP_minus()
+            if magic_hero.HP == 0:
+                s_HP_0.play()
+            else:
+                s_HP_minus.play()
 
     def update(self):
         if 1 <= self.random_action <= 4:
@@ -280,6 +283,7 @@ class FirePrinc(Monsters):
             if self.anim_count == 6:
                 self.not_action = True
                 self.anim_count = 0
+
         if self.random_action == 5:
             self.anim_count = self.anim_count % 16
             self.image = FirePrinc.fire_knife[self.anim_count]
@@ -287,6 +291,7 @@ class FirePrinc(Monsters):
                 self.testcollide()
                 self.not_action = True
                 self.anim_count = 0
+
         if self.random_action == 6:
             self.anim_count = self.anim_count % 10
             self.image = FirePrinc.chopping_attack[self.anim_count]
@@ -294,9 +299,128 @@ class FirePrinc(Monsters):
                 self.testcollide()
                 self.not_action = True
                 self.anim_count = 0
+
         if self.random_action == 7:
             self.anim_count = self.anim_count % 7
             self.image = FirePrinc.burst_attack[self.anim_count]
+            if self.anim_count == 6:
+                self.testcollide()
+                self.not_action = True
+                self.anim_count = 0
+
+
+class WaterEmpress(Monsters):
+    attack = [load_image("water_empress/attack/attack_1.png"),
+              load_image("water_empress/attack/attack_2.png"),
+              load_image("water_empress/attack/attack_3.png"),
+              load_image("water_empress/attack/attack_4.png"),
+              load_image("water_empress/attack/attack_5.png"),
+              load_image("water_empress/attack/attack_6.png"),
+              load_image("water_empress/attack/attack_7.png")]
+
+    drop = [load_image("water_empress/drop/drop_1.png"),
+            load_image("water_empress/drop/drop_2.png"),
+            load_image("water_empress/drop/drop_3.png"),
+            load_image("water_empress/drop/drop_4.png"),
+            load_image("water_empress/drop/drop_5.png"),
+            load_image("water_empress/drop/drop_6.png"),
+            load_image("water_empress/drop/drop_7.png"),
+            load_image("water_empress/drop/drop_8.png"),
+            load_image("water_empress/drop/drop_9.png"),
+            load_image("water_empress/drop/drop_10.png"),
+            load_image("water_empress/drop/drop_11.png"),
+            load_image("water_empress/drop/drop_12.png"),
+            load_image("water_empress/drop/drop_13.png"),
+            load_image("water_empress/drop/drop_14.png"),
+            load_image("water_empress/drop/drop_15.png"),
+            load_image("water_empress/drop/drop_16.png"),
+            load_image("water_empress/drop/drop_17.png"),
+            load_image("water_empress/drop/drop_18.png"),
+            load_image("water_empress/drop/drop_19.png"),
+            load_image("water_empress/drop/drop_20.png"),
+            load_image("water_empress/drop/drop_21.png"),
+            load_image("water_empress/drop/drop_22.png")]
+
+    wave = [load_image("water_empress/wave/wave_1.png"),
+            load_image("water_empress/wave/wave_2.png"),
+            load_image("water_empress/wave/wave_3.png"),
+            load_image("water_empress/wave/wave_4.png"),
+            load_image("water_empress/wave/wave_5.png"),
+            load_image("water_empress/wave/wave_6.png"),
+            load_image("water_empress/wave/wave_7.png"),
+            load_image("water_empress/wave/wave_8.png"),
+            load_image("water_empress/wave/wave_9.png"),
+            load_image("water_empress/wave/wave_10.png"),
+            load_image("water_empress/wave/wave_11.png"),
+            load_image("water_empress/wave/wave_12.png"),
+            load_image("water_empress/wave/wave_13.png"),
+            load_image("water_empress/wave/wave_14.png")]
+
+    enpress_walk = [load_image("water_empress/walk/walk_2.png"),
+                    load_image("water_empress/walk/walk_3.png"),
+                    load_image("water_empress/walk/walk_4.png"),
+                    load_image("water_empress/walk/walk_5.png"),
+                    load_image("water_empress/walk/walk_6.png"),
+                    load_image("water_empress/walk/walk_7.png"),
+                    load_image("water_empress/walk/walk_8.png"),
+                    load_image("water_empress/walk/walk_9.png"),
+                    load_image("water_empress/walk/walk_10.png")]
+
+    def __init__(self, group, pos_x, pos_y):
+        super().__init__(group, pos_y)
+        self.image = WaterEmpress.enpress_walk[0]
+        self.anim_count = 0
+        self.rect.x = pos_x
+        self.rect.y = pos_y
+        self.not_action = True
+        self.random_action = 1
+
+    def testcollide(self):
+        is_kill = pygame.sprite.spritecollideany(self, hero_sprites)
+        if is_kill:
+            magic_hero.HP_minus()
+            if magic_hero.HP == 0:
+                s_HP_0.play()
+            else:
+                s_HP_minus.play()
+
+    def update(self):
+        if 1 <= self.random_action <= 4:
+            self.anim_count = self.anim_count % 9
+            self.image = WaterEmpress.enpress_walk[self.anim_count]
+            if self.random_action <= 2:
+                dx = 3
+            else:
+                dx = -3
+            self.rect.x += dx
+            if self.anim_count == 8:
+                self.not_action = True
+                self.anim_count = 0
+
+        if self.random_action == 5:
+            self.anim_count = self.anim_count % 14
+            self.image = WaterEmpress.wave[self.anim_count]
+            if self.anim_count >= 9:
+                self.testcollide()
+            if self.anim_count == 13:
+                self.not_action = True
+                self.anim_count = 0
+
+        if self.random_action == 6:
+            self.anim_count = self.anim_count % 22
+            self.image = WaterEmpress.drop[self.anim_count]
+            if self.anim_count >= 18:
+                self.testcollide()
+            if self.anim_count == 21:
+                self.testcollide()
+                self.not_action = True
+                self.anim_count = 0
+
+        if self.random_action == 7:
+            self.anim_count = self.anim_count % 7
+            self.image = WaterEmpress.attack[self.anim_count]
+            if self.anim_count >= 5:
+                self.testcollide()
             if self.anim_count == 6:
                 self.testcollide()
                 self.not_action = True
@@ -339,24 +463,6 @@ class Hero(pygame.sprite.Sprite):
                  load_image("right_run/right_run_7.png"),
                  load_image("right_run/right_run_8.png")]
 
-    """left_run = [load_image("left_run/left_run_1.png"),
-                load_image("left_run/left_run_2.png"),
-                load_image("left_run/left_run_3.png"),
-                load_image("left_run/left_run_4.png"),
-                load_image("left_run/left_run_5.png"),
-                load_image("left_run/left_run_6.png"),
-                load_image("left_run/left_run_7.png"),
-                load_image("left_run/left_run_8.png")]"""
-
-    procast = [load_image("procast/procast_1.png"),
-               load_image("procast/procast_2.png"),
-               load_image("procast/procast_3.png"),
-               load_image("procast/procast_4.png"),
-               load_image("procast/procast_5.png"),
-               load_image("procast/procast_6.png"),
-               load_image("procast/procast_7.png"),
-               load_image("procast/procast_8.png")]
-
     hide = [load_image("hide/hide_4.png"),
             load_image("hide/hide_3.png"),
             load_image("hide/hide_2.png"),
@@ -382,6 +488,7 @@ class Hero(pygame.sprite.Sprite):
             a_c = self.anim_count % 4
             self.image = Hero.hide[a_c]
             if self.anim_count == 8:
+                s_portal.play()
                 self.condition = "passiv"
 
         if self.condition == "passiv":
@@ -402,6 +509,10 @@ class Hero(pygame.sprite.Sprite):
 
         if magic_hero.bullitcollide(bullit_m_sprite):
             magic_hero.HP_minus()
+            if magic_hero.HP == 0:
+                s_HP_0.play()
+            else:
+                s_HP_minus.play()
         self.life_update()
 
     def move(self):
@@ -487,7 +598,18 @@ if __name__ == '__main__':
     anim_counter_tornado = 0
     anim_counter_guardian = 0
     anim_counter_princ = 0
-    Kolvo_level = 1
+    Kolvo_level = 2
+
+    s_kaplya = pygame.mixer.Sound('sound/effect/kaplya.wav')
+    s_kaplya3 = pygame.mixer.Sound('sound/effect/kaplya3.wav')
+    s_fire_bullit = pygame.mixer.Sound('sound/effect/fire_bullit.wav')
+    s_HP_0 = pygame.mixer.Sound('sound/effect/HP_0.wav')
+    s_HP_minus = pygame.mixer.Sound('sound/effect/HP_minus.wav')
+    s_kvak = pygame.mixer.Sound('sound/effect/kvak.wav')
+    s_portal = pygame.mixer.Sound('sound/effect/portal.wav')
+    s_prygok = pygame.mixer.Sound('sound/effect/prygok.wav')
+    s_veter = pygame.mixer.Sound('sound/effect/veter.wav')
+    s_berserk = pygame.mixer.Sound('sound/effect/berserk.wav')
 
     hero_timer_anim = pygame.USEREVENT
     fish_timer_create = pygame.USEREVENT + 1
@@ -498,6 +620,8 @@ if __name__ == '__main__':
     tornado_life_anim = pygame.USEREVENT + 6
     fireprinc_attac_kd = pygame.USEREVENT + 7
     fireprinc_timer_anim = pygame.USEREVENT + 8
+    waterEmpress_attac_kd = pygame.USEREVENT + 9
+    waterEmpress_timer_anim = pygame.USEREVENT + 10
     # superr_kd = pygame.USEREVENT + 9
 
     pygame.time.set_timer(hero_timer_anim, 150)
@@ -508,6 +632,8 @@ if __name__ == '__main__':
     pygame.time.set_timer(guardian_timer_anim, 100)
     pygame.time.set_timer(fireprinc_timer_anim, 100)
     pygame.time.set_timer(fireprinc_attac_kd, 1000)
+    pygame.time.set_timer(waterEmpress_attac_kd, 1000)
+    pygame.time.set_timer(waterEmpress_timer_anim, 100)
     # pygame.time.set_timer(superr_kd, 500)
 
     size = width, height = 1700, 620
@@ -541,11 +667,15 @@ if __name__ == '__main__':
             load_game = False
 
             if Nomer_Level == 0:
+                pygame.mixer.music.load('sound/musik/fish.mp3')
+                pygame.mixer.music.play(-1)
                 MonsterFish(fish_sprites, 350)
                 pygame.time.set_timer(portal_timer_create, 500)
                 portal_not_exist = True
 
             if Nomer_Level == 1:
+                pygame.mixer.music.load('sound/musik/prince.mp3')
+                pygame.mixer.music.play(-1)
                 Guardian_monster1 = Guardian(monsters_sprites, 1500, 50)
                 Guardian_monster2 = Guardian(monsters_sprites, 1400, 25)
                 Guardian_monster3 = Guardian(monsters_sprites, 1300, 400)
@@ -554,7 +684,9 @@ if __name__ == '__main__':
                 portal_not_exist = True
 
             if Nomer_Level == 2:
-                pass
+                pygame.mixer.music.load('sound/musik/waterEmpress.mp3')
+                pygame.mixer.music.play(-1)
+                waterEmpress_monster = WaterEmpress(monsters_sprites, 400, 100)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -569,17 +701,21 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     if not magic_hero.loser:
+                        s_kaplya.play()
                         HeroBullit(bullit_sprite, magic_hero.rect.x + 100, magic_hero.rect.y + 70)
 
                 if event.key == pygame.K_q:
                     if not magic_hero.loser:
+                        s_veter.play()
                         HeroBullitTornado(tornado_sprite, random.randint(100, 1500), 200)
 
                 if event.key == pygame.K_e:
                     # if event.type != superr_kd:
                     if not magic_hero.loser:
+                        s_kaplya3.play()
                         for b in range(1, 4):
                             HeroBullitSuper(bullit_sprite, magic_hero.rect.x + 100, magic_hero.rect.y + 70, b)
+
                 if event.key == pygame.K_a:
                     magic_hero.condition = "left"
 
@@ -588,14 +724,18 @@ if __name__ == '__main__':
 
                 if event.key == pygame.K_LSHIFT:
                     # crazy run 25 -  norm 3
-                    magic_hero.speed = 3
+                    magic_hero.speed = 25
 
                 if event.key == pygame.K_SPACE:
+                    s_prygok.play()
                     if not magic_hero.jump_flg:
                         magic_hero.jump()
+
                 if event.key == pygame.K_f:
+                    s_berserk.play()
                     StaticImg(images, 600, 50, 0)
                     pygame.time.set_timer(fish_timer_create, 500)
+
                 if event.key == pygame.K_n:
                     if magic_hero.loser:
                         # old level picture: you are LOSER? press "n"
@@ -635,10 +775,20 @@ if __name__ == '__main__':
                     Guardian_monster2.gun()
                     Guardian_monster3.gun()
 
-                # if event.type == fireprinc_attac_kd:
                 if FirePrinc_monster.not_action:
                     FirePrinc_monster.random_action = random.randint(1, 7)
                     FirePrinc_monster.not_action = False
+
+            if Nomer_Level == 2:
+                if event.type == waterEmpress_timer_anim:
+                    waterEmpress_monster.anim_count += 1
+                    if waterEmpress_monster.anim_count == 30:
+                        waterEmpress_monster.anim_count = 0
+
+                if waterEmpress_monster.not_action:
+                    waterEmpress_monster.random_action = random.randint(1, 7)
+                    print(waterEmpress_monster.random_action)
+                    waterEmpress_monster.not_action = False
 
             if event.type == tornado_life_timer:
                 for spr in tornado_sprite:
@@ -651,6 +801,7 @@ if __name__ == '__main__':
 
             if Nomer_Level == 0:
                 if event.type == fish_timer_create:
+                    s_kvak.play()
                     fish_y = random.randint(50, 500)
                     MonsterFish(fish_sprites, fish_y)
 
