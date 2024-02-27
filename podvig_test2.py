@@ -598,9 +598,9 @@ class Platform(pygame.sprite.Sprite):
 
 
 platform1 = Platform(300, 400, 200, 20)
-platform2 = Platform(500, 600, 150, 20)
-platform3 = Platform(800, 450, 200, 20)
-platform4 = Platform(1100, 500, 150, 20)
+platform2 = Platform(500, 300, 150, 20)
+platform3 = Platform(800, 200, 200, 20)
+platform4 = Platform(1100, 150, 150, 20)
 
 if __name__ == '__main__':
     pygame.init()
