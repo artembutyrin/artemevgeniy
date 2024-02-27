@@ -25,6 +25,9 @@ settings_button_image = pygame.transform.scale(settings_button_image, (200, 50))
 exit_button_image = pygame.image.load('exit_button_image.jpg')
 exit_button_image = pygame.transform.scale(exit_button_image, (200, 50))
 
+history_button_image = pygame.image.load('history_button_image.png')
+history_button_image = pygame.transform.scale(history_button_image, (200, 50))
+
 font = pygame.font.Font(None, 36)
 
 graphics_options = ['Low', 'Low', 'Low']
@@ -84,12 +87,67 @@ def show_settings_window():
         pygame.display.flip()
 
 
+def show_character_history_window():
+    global window
+
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+
+    SCREEN_WIDTH = 750
+    SCREEN_HEIGHT = 470
+
+    character_window = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))  
+
+    character_window.fill(WHITE)
+
+    background_image = pygame.image.load("background_image.jpg")
+    character_window.blit(background_image, (0, 0))
+
+    character_image = pygame.image.load("2024-02-22 21.43.26.png")
+    character_window.blit(character_image, (20, 120))
+    character_image = pygame.image.load("2024-02-27 18.48.34.png")
+    character_window.blit(character_image, (90, 120))
+    character_image = pygame.image.load("2024-02-27 18.51.38.png")
+    character_window.blit(character_image, (160, 120))
+    character_image = pygame.image.load("2024-02-27 18.52.29.png")
+    character_window.blit(character_image, (230, 120))
+    character_image = pygame.image.load("2024-02-27 18.53.40.png")
+    character_window.blit(character_image, (300, 120))
+    character_image = pygame.image.load("2024-02-27 18.54.16.png")
+    character_window.blit(character_image, (370, 120))
+
+    font = pygame.font.SysFont("Arial", 20)
+
+    with open('game_story.txt', 'r') as file:
+        game_story = file.readlines()
+
+    with open('character_description.txt', 'r') as file:
+        character_story = file.readlines()
+
+    def draw_text(text_list, x, y):
+        for i, line in enumerate(text_list):
+            text_surface = font.render(line.strip(), True, BLACK)
+            character_window.blit(text_surface, (x, y + i * 25))
+
+    draw_text(game_story, 10, 10) 
+    draw_text(character_story, 10, SCREEN_HEIGHT - 280)
+
+    window.blit(character_window, (25, 25))
+
+    pygame.display.flip()
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+
 while True:
     window.blit(background_image, (0, 0))
 
     title_font = pygame.font.Font(None, 72)
     title_text = title_font.render('Exploit', True, BLACK)
-
     title_text_shadow = title_font.render('Exploit', True, (50, 50, 50))
 
     title_text_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 50))
@@ -101,10 +159,12 @@ while True:
     start_button = pygame.Rect(300, 200, 200, 50)
     settings_button = pygame.Rect(300, 300, 200, 50)
     exit_button = pygame.Rect(300, 400, 200, 50)
+    history_button = pygame.Rect(300, 500, 200, 50)
 
     window.blit(start_button_image, (300, 200))
     window.blit(settings_button_image, (300, 300))
     window.blit(exit_button_image, (300, 400))
+    window.blit(history_button_image, (300, 500))
 
     start_text = font.render('Start', True, BLACK)
     start_text_rect = start_text.get_rect(center=start_button.center)
@@ -117,6 +177,10 @@ while True:
     exit_text = font.render('Exit', True, BLACK)
     exit_text_rect = exit_text.get_rect(center=exit_button.center)
     window.blit(exit_text, exit_text_rect)
+
+    history_text = font.render('History', True, BLACK)
+    history_text_rect = history_text.get_rect(center=history_button.center)
+    window.blit(history_text, history_text_rect)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -131,5 +195,8 @@ while True:
             elif exit_button.collidepoint(event.pos):
                 pygame.quit()
                 sys.exit()
+            elif history_button.collidepoint(event.pos):
+                print("History button clicked")
+                show_character_history_window()
 
     pygame.display.flip()
