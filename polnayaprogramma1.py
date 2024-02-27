@@ -6,6 +6,8 @@ from datetime import datetime
 
 pygame.init()
 
+image_folder = 'imagesss'
+
 pygame.mixer.music.load('background_music.mp3')
 pygame.mixer.music.play(-1)
 
@@ -18,19 +20,19 @@ BLACK = (0, 0, 0)
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Exploit')
 
-background_image = pygame.image.load('background_image.jpg')
+background_image = pygame.image.load(os.path.join(image_folder, 'background_image.jpg'))
 background_image = pygame.transform.scale(background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
 
-start_button_image = pygame.image.load('start_button_image.jpg')
+start_button_image = pygame.image.load(os.path.join(image_folder, 'start_button_image.jpg'))
 start_button_image = pygame.transform.scale(start_button_image, (200, 50))
 
-settings_button_image = pygame.image.load('settings_button_image.jpg')
+settings_button_image = pygame.image.load(os.path.join(image_folder, 'settings_button_image.jpg'))
 settings_button_image = pygame.transform.scale(settings_button_image, (200, 50))
 
-exit_button_image = pygame.image.load('exit_button_image.jpg')
+exit_button_image = pygame.image.load(os.path.join(image_folder, 'exit_button_image.jpg'))
 exit_button_image = pygame.transform.scale(exit_button_image, (200, 50))
 
-history_button_image = pygame.image.load('history_button_image.png')
+history_button_image = pygame.image.load(os.path.join(image_folder, 'history_button_image.png'))
 history_button_image = pygame.transform.scale(history_button_image, (200, 50))
 
 font = pygame.font.Font(None, 36)
@@ -964,20 +966,25 @@ def show_character_history_window():
 
     character_window.fill(WHITE)
 
-    background_image = pygame.image.load("background_image.jpg")
+    background_image = pygame.image.load("imagesss/background_image.jpg")
     character_window.blit(background_image, (0, 0))
 
-    character_image = pygame.image.load("2024-02-22 21.43.26.png")
+    character_image = pygame.image.load("imagesss/2024-02-22 21.43.26.png")
     character_window.blit(character_image, (20, 120))
-    character_image = pygame.image.load("2024-02-27 18.48.34.png")
+
+    character_image = pygame.image.load("imagesss/2024-02-27 18.48.34.png")
     character_window.blit(character_image, (90, 120))
-    character_image = pygame.image.load("2024-02-27 18.51.38.png")
+
+    character_image = pygame.image.load("imagesss/2024-02-27 18.51.38.png")
     character_window.blit(character_image, (160, 120))
-    character_image = pygame.image.load("2024-02-27 18.52.29.png")
+
+    character_image = pygame.image.load("imagesss/2024-02-27 18.52.29.png")
     character_window.blit(character_image, (230, 120))
-    character_image = pygame.image.load("2024-02-27 18.53.40.png")
+
+    character_image = pygame.image.load("imagesss/2024-02-27 18.53.40.png")
     character_window.blit(character_image, (300, 120))
-    character_image = pygame.image.load("2024-02-27 18.54.16.png")
+
+    character_image = pygame.image.load("imagesss/2024-02-27 18.54.16.png")
     character_window.blit(character_image, (370, 120))
 
     font = pygame.font.SysFont("Arial", 20)
