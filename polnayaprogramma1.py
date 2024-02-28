@@ -44,7 +44,6 @@ sound_options = ['On', 'Off']
 selected_sound_option = 0
 
 def run_game():
-    # Ваш код игры здесь
     def load_image(name, colorkey=None):
         fullname = os.path.join('images', name)
         if not os.path.isfile(fullname):
@@ -72,7 +71,7 @@ def run_game():
     class Level(pygame.sprite.Sprite):
         background = [load_image("backgrounds/under_water.jpg"),
                       load_image("backgrounds/defolt_forest.jpg"),
-                      load_image("backgrounds/night_water.png")]
+                      load_image("backgrounds/night_water.jpg")]
 
         def __init__(self, group, x_pos, nomer):
             super().__init__(group, all_sprites)
@@ -580,6 +579,16 @@ def run_game():
                     self.speed = 1
                     self.rect.y = self.y_start
                     hero_move_y = 0
+                    
+            platform_collide = pygame.sprite.spritecollide(self, platform_sprites, False) 
+            for platform in platform_collide: 
+                if hero_move_y > 0:
+                    self.rect.bottom = platform.rect.top 
+                    self.jump_size = 0 
+                    self.jump_flg = False 
+                elif hero_move_y < 0: 
+                    self.rect.top = platform.rect.bottom 
+                    self.jump_size = 0
 
             self.rect = self.rect.move(hero_move_x, hero_move_y)
 
@@ -892,8 +901,26 @@ def run_game():
             for platform in platform_sprites:
                 screen.blit(platform.image, platform.rect)
 
-            if magic_hero.HP == 0:  # Проверка смерти персонажа
+            if magic_hero.HP == 0:
                 death_window.show()
+
+                load_game = True
+                end_of_level = False
+                Nomer_Level = 0
+                magic_hero = None
+                all_sprites.empty()
+                background_sprite.empty()
+                fish_sprites.empty()
+                monsters_sprites.empty()
+                hero_sprites.empty()
+                images.empty()
+                heart_sprites.empty()
+                portal_sprite.empty()
+                bullit_sprite.empty()
+                bullit_m_sprite.empty()
+                tornado_sprite.empty()
+                Nomer_Level = 0
+            
 
 
             clock.tick(50)
